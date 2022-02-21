@@ -12,22 +12,6 @@ $connectionParams = [
 
 $conn = \Doctrine\DBAL\DriverManager::getConnection($connectionParams);
 
-if (isset($_POST['submit'])) {
-    $name = $_POST['name'];
-    $surname = $_POST['surname'];
-    $insuranceNumber = $_POST['insurance_number'];
-
-    $person = new \App\Person($name, $surname, $insuranceNumber);
-
-    $registry = new \App\Registry();
-    $registry->addToList($person);
-
-    foreach ($registry->getPerson() as $p) {
-        $conn->insert('users', ['name' => $p->getPersonName(), 'surname' => $p->getPersonSurname(),
-            'insurance_number' => $p->getInsuranceNumber()]);
-    }
-}
-
 ?>
     <!doctype html>
     <html lang="en">
@@ -55,11 +39,29 @@ if (isset($_POST['submit'])) {
     </form>
 
     <form action="/" method="post" class="form">
-        <button type="submit" name="search" class="search_button">Search</button>
+        <button type="submit" name="search" class="search_button">Show</button>
     </form>
 
     </body>
     </html>
+
+<?php
+if (isset($_POST['submit'])) {
+    $name = $_POST['name'];
+    $surname = $_POST['surname'];
+    $insuranceNumber = $_POST['insurance_number'];
+
+    $person = new \App\Person($name, $surname, $insuranceNumber);
+
+    $registry = new \App\Registry();
+    $registry->addToList($person);
+
+    foreach ($registry->getPerson() as $p) {
+        $conn->insert('users', ['name' => $p->getPersonName(), 'surname' => $p->getPersonSurname(),
+            'insurance_number' => $p->getInsuranceNumber()]);
+    }
+}
+?>
 
 <div class="form">
 <?php
